@@ -1,11 +1,16 @@
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
+import Navbar from "@/components/Navbar";
 
 const jakarta = Plus_Jakarta_Sans({
-  subsets: ["vietnamese"],
   weight: ["400", "500", "600", "700", "800"],
   variable: "--font-jakarta",
+});
+
+const inter = Inter({
+  subsets: ["vietnamese"],
+  weight: ["400", "700", "800", "900"],
+  variable: "--font-inter",
 });
 
 export default function RootLayout({
@@ -16,9 +21,9 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <body
-        className={`${jakarta.variable} antialiased bg-white dark:bg-slate-950`}
+        className={`${inter.variable} antialiased bg-white dark:bg-slate-950`}
       >
-        <Header />
+        <Navbar />
         {children}
       </body>
     </html>
