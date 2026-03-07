@@ -3,12 +3,11 @@ import Image from "next/image";
 
 export default function Navbar() {
   return (
-<nav className="fixed top-0 inset-x-0 z-50 bg-white/70 backdrop-blur-xl border-b border-slate-200/60 px-8 py-4">
-  {/* inset-x-0 đảm bảo navbar luôn full chiều rộng khi dùng fixed */}
-  {/* ... nội dung bên trong giữ nguyên ... */}
+    <nav className="fixed top-0 inset-x-0 z-50 bg-white/70 backdrop-blur-xl border-b border-slate-200/60 px-8 py-4">
+      {/* inset-x-0 đảm bảo navbar luôn full chiều rộng khi dùng fixed */}
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-12">
-          {/* Logo*/}
+          {/* logo*/}
           <Link
             href="/"
             className="flex items-center space-x-2 group cursor-pointer"
@@ -26,13 +25,13 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Menu Links */}
+          {/* menu */}
           <div className="hidden md:flex space-x-8">
             <Link
               className="text-sm font-semibold text-slate-500 hover:text-emerald-600 transition-colors"
               href="/about"
             >
-              Tại sao chọn EZ?
+              Luyện đề
             </Link>
             <Link
               className="text-sm font-semibold text-slate-500 hover:text-emerald-600 transition-colors"
@@ -49,7 +48,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Auth Buttons */}
+        {/* auth buttons */}
         <div className="flex items-center space-x-4">
           <button className="px-6 py-2.5 text-sm font-bold text-slate-600 hover:text-emerald-600 transition-colors cursor-pointer">
             Đăng nhập
@@ -62,4 +61,3 @@ export default function Navbar() {
     </nav>
   );
 }
-
