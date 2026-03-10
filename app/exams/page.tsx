@@ -9,10 +9,13 @@ export default function FullTestPage() {
     <div className="space-y-6">
       {/* header title */}
       <header className="mb-8 flex flex-col md:flex-row items-start md:items-end justify-between gap-6">
-        <div className="space-y-4">
+        <div className="space-y-3">
           <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight font-lexend uppercase">
-            FULL TEST
+            READING & LISTENING
           </h1>
+          <p className="text-slate-500 mt-2 text-sm font-medium">
+            Luyện tập ........
+          </p>
           <div className="flex flex-wrap items-center gap-3">
             {filterYears.map((year) => (
               <button

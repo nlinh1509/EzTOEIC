@@ -1,7 +1,12 @@
+"use client"; // để xài usePathname
+
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
+  const pathname = usePathname();
+
   return (
     <nav className="fixed top-0 inset-x-0 z-50 bg-white/70 backdrop-blur-xl border-b border-slate-200/60 px-8 py-4">
       {/* inset-x-0 đảm bảo navbar luôn full chiều rộng khi dùng fixed */}
@@ -28,20 +33,34 @@ export default function Navbar() {
           {/* menu */}
           <div className="hidden md:flex space-x-8">
             <Link
-              className="text-sm font-semibold text-slate-500 hover:text-emerald-600 transition-colors"
               href="/exams"
+              className={`text-sm font-semibold transition-all duration-300 ${
+                pathname.startsWith("/exams")
+                  ? "text-emerald-600 underline decoration-2 underline-offset-[6px] hover:no-underline"
+                  : "text-slate-500 hover:text-emerald-600"
+              }`}
             >
-              Luyện đề
+              ETS TEST
             </Link>
+
             <Link
-              className="text-sm font-semibold text-slate-500 hover:text-emerald-600 transition-colors"
-              href="/"
+              href="/vocabulary"
+              className={`text-sm font-semibold transition-all duration-300 ${
+                pathname.startsWith("/vocabulary")
+                  ? "text-emerald-600 underline decoration-2 underline-offset-[6px] hover:no-underline"
+                  : "text-slate-500 hover:text-emerald-600"
+              }`}
             >
-              Thư viện đề thi
+              Vocabulary
             </Link>
+
             <Link
-              className="text-sm font-semibold text-slate-500 hover:text-emerald-600 transition-colors"
               href="/leaderboard"
+              className={`text-sm font-semibold transition-all duration-300 ${
+                pathname.startsWith("/leaderboard")
+                  ? "text-emerald-600 underline decoration-2 underline-offset-[6px] hover:no-underline"
+                  : "text-slate-500 hover:text-emerald-600"
+              }`}
             >
               Bảng xếp hạng
             </Link>

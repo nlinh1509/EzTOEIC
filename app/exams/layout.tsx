@@ -6,7 +6,7 @@ import Link from "next/link";
 const sidebarMenu = [
   {
     path: "/exams",
-    title: "Full test ",
+    title: " Reading & Listening",
     desc: "200 questions splitted into 7 parts",
   },
   {
