@@ -29,13 +29,13 @@ export default function Navbar() {
           <div className="hidden md:flex space-x-8">
             <Link
               className="text-sm font-semibold text-slate-500 hover:text-emerald-600 transition-colors"
-              href="/about"
+              href="/exams"
             >
               Luyện đề
             </Link>
             <Link
               className="text-sm font-semibold text-slate-500 hover:text-emerald-600 transition-colors"
-              href="/exams"
+              href="/"
             >
               Thư viện đề thi
             </Link>
