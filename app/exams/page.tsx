@@ -21,7 +21,7 @@ export default async function FullTestPage({
           <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight font-lexend uppercase">
             READING & LISTENING
           </h1>
-          <p className="text-slate-500 text-sm font-medium">
+          <p className="text-slate-500 mt-2 text-sm font-medium">
             Luyện tập 200 câu chia thành 7 parts.
           </p>
 
