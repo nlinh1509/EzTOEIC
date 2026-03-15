@@ -1,9 +1,14 @@
+// props truyền từ cha sang con và display (cha)
 interface FullCardProps {
   title: string;
-  isVerified?: boolean;
 }
+// một cách khác
+// export default function FullCard({ title }: FullCardProps) {
+//   // Lấy thẳng chữ 'title' ra xài luôn, không cần thông qua thằng 'props' nữa
+//   return <h3>{title}</h3>
+// }
 
-export default function FullCard({ title, isVerified }: FullCardProps) {
+export default function FullCard(props: FullCardProps) {
   return (
     <div className="bg-white p-6 rounded-[2.5rem] border border-emerald-100 shadow-sm hover-lift group relative overflow-hidden">
       {/* header */}
@@ -14,7 +19,7 @@ export default function FullCard({ title, isVerified }: FullCardProps) {
           </span>
         </div>
         <h3 className="text-xl font-bold text-slate-900 font-lexend">
-          {title}
+          {props.title}
         </h3>
       </div>
 
@@ -49,15 +54,6 @@ export default function FullCard({ title, isVerified }: FullCardProps) {
           Review
         </button> */}
       </div>
-
-      {/* Verified Watermark */}
-      {isVerified && (
-        <div className="absolute -top-1 -right-1 pointer-events-none">
-          <span className="material-symbols-outlined text-emerald-200/50 text-6xl rotate-12">
-            verified
-          </span>
-        </div>
-      )}
     </div>
   );
 }

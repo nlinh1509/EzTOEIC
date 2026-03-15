@@ -19,7 +19,7 @@ const sidebarMenu = [
     title: "Practice Reading",
     desc: "100 questions splitted into 3 parts",
   },
-  { path: "/exams/writing", title: "Practice Writing", desc: "..." },
+  // { path: "/exams/writing", title: "Practice Writing", desc: "..." },
 ];
 
 export default function ExamsLayout({
@@ -30,30 +30,44 @@ export default function ExamsLayout({
   const pathname = usePathname();
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-8 pt-28 pb-10 flex flex-col lg:flex-row gap-10">
-      {/* SIDEBAR */}
-      <aside className="w-full lg:w-80 shrink-0 space-y-4">
-        {/* Menu Box */}
+      {/* sidebar */}
+      <aside className="sticky top-28 self-start w-80 shrink-0 flex flex-col gap-6">
+        {/* menu box (ets test box) */}
         <div className="bg-white p-6 rounded-[2rem] border-0 shadow-sm">
-          <h3 className=" text-center text-[13px] font-black text-slate-400 uppercase tracking-widest mb-4 px-4 font-inter">
+          <h3 className="text-center text-[13px] font-black text-slate-400 uppercase tracking-widest mb-4 px-4 font-inter">
             ETS TEST
           </h3>
           <div className="space-y-2">
+            {/* luồn chạy map
+            Hiển thị theo map (only content with path, title, desc)
+            1. bấm nút (exams/listening)
+            2. dò từng Link 
+            3. dò box 1 (full test) mà url à exams 
+            không giống 
+            => isActive (của fulltest) là false 
+            4. dò tiếp listening, giống url của 2 cái dống hệt 
+            => true
+            */}
+
             {sidebarMenu.map((menu) => {
-              // isActive is correct => bg green
-              const isActive = pathname === menu.path;
+              const isActive =
+                menu.path === "/exams"
+                  ? pathname === "/exams"
+                  : pathname.startsWith(menu.path);
+
               return (
                 <Link
                   key={menu.path}
+                  // khi bấm vào path đc cập nhật ở đây đầu tiên
                   href={menu.path}
-                  className={`w-full flex items-center gap-4 p-4 border-[0.1px] rounded-2xl cursor-pointer transition-all text-left  ${
+                  className={` w-full flex items-center gap-4 p-4 border rounded-2xl cursor-pointer transition-all text-left ${
                     isActive
-                      ? "bg-emerald-50 text-emerald-700 shadow-sm "
-                      : "text-slate-500 hover:bg-slate-50"
-                  }
-                  `}
+                      ? "bg-emerald-50 text-emerald-700 border-emerald-100 shadow-sm"
+                      : "border-slate-200 text-slate-500 hover:bg-slate-50 hover:border-slate-200"
+                  }`}
                 >
-                  <div className="overflow-hidden ">
-                    <p className=" font-bold text-[14px] leading-tight truncate">
+                  <div className="overflow-hidden">
+                    <p className="font-bold text-[14px] leading-tight truncate">
                       {menu.title}
                     </p>
                     <p
@@ -70,7 +84,7 @@ export default function ExamsLayout({
           </div>
         </div>
 
-        {/* Stats Box */}
+        {/* statistics */}
         <div className="bg-linear-to-br from-emerald-500 to-teal-600 p-6 rounded-[2rem] text-white shadow-xl shadow-emerald-200/50">
           <p className="text-[10px] font-black uppercase tracking-widest opacity-80 mb-2">
             Thông kê L&R
@@ -84,7 +98,7 @@ export default function ExamsLayout({
         </div>
       </aside>
 
-      <main className="grow">{children}</main>
+      <main className="flex-1">{children}</main>
     </div>
   );
 }
