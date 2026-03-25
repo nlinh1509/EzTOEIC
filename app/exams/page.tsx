@@ -1,5 +1,5 @@
 import FullCard from "@/components/FullCard";
-import { examsDatabase } from "@/container/exam";
+import { examsDatabase } from "@/data/exam";
 import FilterYears from "@/components/FilterYears";
 
 export default async function FullTestPage({
@@ -31,7 +31,11 @@ export default async function FullTestPage({
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 ">
         {allExamsOfYear.map((exam) => (
-          <FullCard key={exam.id} title={exam.title} />
+          <FullCard
+            key={exam.id}
+            title={exam.title}
+            href={`/exams/test-${exam.id}?year=${currentYear}`}
+          />
         ))}
       </div>
     </div>
