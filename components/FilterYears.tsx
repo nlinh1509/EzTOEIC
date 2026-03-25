@@ -19,7 +19,7 @@ export default function FilterYears({
           <Link
             key={year}
             href={`${baseUrl}?year=${year}`}
-            className={`border-[1px] px-5 py-1.5 rounded-full text-[13px] font-bold transition-all cursor-pointer ${
+            className={`border px-5 py-1.5 rounded-full text-[13px] font-bold transition-all cursor-pointer ${
               isActive
                 ? "border-emerald-500 bg-emerald-500 text-white shadow-md shadow-emerald-200/50"
                 : "border-slate-200 bg-white text-slate-600 hover:border-emerald-300 hover:text-emerald-600"

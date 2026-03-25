@@ -10,7 +10,7 @@ interface FullCardProps {
 
 export default function FullCard(props: FullCardProps) {
   return (
-    <div className="bg-white p-6 rounded-[2.5rem] border border-emerald-100 shadow-sm hover-lift group relative overflow-hidden">
+    <div className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm hover-lift group relative overflow-hidden">
       {/* header */}
       <div className="flex items-center gap-3 mb-4">
         <div className="w-10 h-10 shrink-0 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">

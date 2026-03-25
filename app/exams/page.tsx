@@ -16,7 +16,7 @@ export default async function FullTestPage({
   return (
     <div className="space-y-6">
       {/* header */}
-      <header className="mb-8 flex flex-col md:flex-row items-start md:items-end justify-between gap-6">
+      <header className="mb-6 flex flex-col md:flex-row items-start md:items-end justify-between gap-6">
         <div className="space-y-4">
           <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight font-lexend uppercase">
             READING & LISTENING
