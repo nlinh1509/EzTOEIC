@@ -1,5 +1,5 @@
 {
-  "name": "strops",
+  "name": "eztoeic",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,8 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.100.1",
     "lucide-react": "^0.563.0",
     "next": "16.1.6",
+    "next-auth": "^4.24.14",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },
