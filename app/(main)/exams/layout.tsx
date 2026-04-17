@@ -5,11 +5,6 @@ import Link from "next/link";
 
 const sidebarMenu = [
   {
-    path: "/exams",
-    title: " Reading & Listening",
-    desc: "200 questions splitted into 7 parts",
-  },
-  {
     path: "/exams/listening",
     title: "Practice Listening",
     desc: "100 questions splitted into 4 parts",
@@ -18,6 +13,11 @@ const sidebarMenu = [
     path: "/exams/reading",
     title: "Practice Reading",
     desc: "100 questions splitted into 3 parts",
+  },
+  {
+    path: "/exams",
+    title: " Reading & Listening",
+    desc: "200 questions splitted into 7 parts",
   },
   // { path: "/exams/writing", title: "Practice Writing", desc: "..." },
 ];
@@ -28,13 +28,23 @@ export default function ExamsLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+
+  // filter display sidebar
+  const isTestPage = pathname.includes("/part-") || pathname.includes("/test-");
+
+  if (isTestPage) {
+    return (
+      <div className="min-h-screen bg-slate-50 pt-18 pb-10 ">{children}</div>
+    );
+  }
   return (
-    <div className="max-w-7xl mx-auto px-6 md:px-8 pt-28 pb-10 flex flex-col lg:flex-row gap-10">
+    // đã xoá pt-28
+    <div className="pt-28 max-w-7xl mx-auto px-6 md:px-8 pb-10 flex flex-col lg:flex-row gap-10 ">
       {/* sidebar */}
       <aside className="sticky top-28 self-start w-80 shrink-0 flex flex-col gap-6">
         {/* menu box (ets test box) */}
         <div className="bg-white p-6 rounded-[2rem] border-0 shadow-sm">
-          <h3 className="text-center text-[13px] font-black text-slate-400 uppercase tracking-widest mb-4 px-4 font-inter">
+          <h3 className="text-center text-[13px] font-black text-slate-400 uppercase tracking-widest mb-4 px-4  font-inter">
             ETS TEST
           </h3>
           <div className="space-y-2">

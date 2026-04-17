@@ -1,6 +1,9 @@
+import Link from "next/link";
+
 // props truyền từ cha sang con và display (cha)
 interface FullCardProps {
   title: string;
+  href: string;
 }
 // một cách khác
 // export default function FullCard({ title }: FullCardProps) {
@@ -8,9 +11,12 @@ interface FullCardProps {
 //   return <h3>{title}</h3>
 // }
 
-export default function FullCard(props: FullCardProps) {
+export default function FullCard({ title, href }: FullCardProps) {
   return (
-    <div className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm hover-lift group relative overflow-hidden">
+    <Link
+      href={href}
+      className="bg-white p-6 rounded-[1.5rem] border border-slate-100 shadow-sm hover-lift group relative overflow-hidden"
+    >
       {/* header */}
       <div className="flex items-center gap-3 mb-4">
         <div className="w-10 h-10 shrink-0 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
@@ -19,7 +25,7 @@ export default function FullCard(props: FullCardProps) {
           </span>
         </div>
         <h3 className="text-xl font-bold text-slate-900 font-lexend">
-          {props.title}
+          {title}
         </h3>
       </div>
 
@@ -41,12 +47,12 @@ export default function FullCard(props: FullCardProps) {
 
       {/* action buttons */}
       <div className="flex gap-3 relative z-10">
-        <button className="text-sm grow flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-2xl transition-all shadow-lg shadow-emerald-100 cursor-pointer">
+        <div className="text-sm grow flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-2xl transition-all shadow-lg shadow-emerald-100 cursor-pointer">
           <span className="material-symbols-outlined filled-icon text-lg">
             play_circle
           </span>
           Làm Bài
-        </button>
+        </div>
         {/* <button className=" text-sm flex items-center justify-center gap-2 px-6 border-2 border-orange-100 bg-orange-50 text-orange-600 font-bold py-3.5 rounded-2xl hover:bg-orange-100 transition-all cursor-pointer">
           <span className="material-symbols-outlined filled-icon text-lg">
             visibility
@@ -54,6 +60,6 @@ export default function FullCard(props: FullCardProps) {
           Review
         </button> */}
       </div>
-    </div>
+    </Link>
   );
 }

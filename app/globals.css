@@ -33,6 +33,7 @@ body {
 }
 
 .material-symbols-outlined {
+  font-size: 24px;
   font-variation-settings:
     "FILL" 0,
     "wght" 400,

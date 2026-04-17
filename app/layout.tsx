@@ -2,6 +2,7 @@
 import { Inter, Lexend } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import AuthProvider from "@/components/AuthProvider";
 
 const inter = Inter({
   subsets: ["vietnamese"],
@@ -9,7 +10,7 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-const lexend = Lexend({ 
+const lexend = Lexend({
   subsets: ["latin"],
   variable: "--font-lexend",
 });
@@ -22,7 +23,6 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <head>
-
         {/* icon */}
         <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
@@ -32,8 +32,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${lexend.variable} antialiased bg-[#f0f9f6] text-slate-900`}
       >
-        <Navbar />
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );
