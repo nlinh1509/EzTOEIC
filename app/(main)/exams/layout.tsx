@@ -34,12 +34,11 @@ export default function ExamsLayout({
 
   if (isTestPage) {
     return (
-      <div className="min-h-screen bg-slate-50 pt-18 pb-10 ">{children}</div>
+      <div className="min-h-screen bg-slate-50 pb-10 ">{children}</div>
     );
   }
   return (
-    // đã xoá pt-28
-    <div className="pt-28 max-w-7xl mx-auto px-6 md:px-8 pb-10 flex flex-col lg:flex-row gap-10 ">
+    <div className="pt-12 max-w-7xl mx-auto px-6 md:px-8 pb-10 flex flex-col lg:flex-row gap-10 ">
       {/* sidebar */}
       <aside className="sticky top-28 self-start w-80 shrink-0 flex flex-col gap-6">
         {/* menu box (ets test box) */}

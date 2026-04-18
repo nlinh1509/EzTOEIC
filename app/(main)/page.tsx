@@ -8,7 +8,7 @@ export default async function Home() {
   return (
     <main>
       {/* test supabase */}
-      <div className="py-16 max-w-7xl mx-auto px-4 sm:px-6 mt-10">
+      <div className=" max-w-7xl mx-auto px-4 sm:px-6 mt-10">
         {error && (
           <p className="text-red-500 font-bold p-4 bg-red-50 rounded-xl border border-red-200">
             Lỗi rồi: {error.message}

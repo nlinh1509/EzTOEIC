@@ -12,7 +12,6 @@ export default function PartOverview({
   partIdString,
   year,
 }: PartOverviewProps) {
-
   // Tách lấy con số
   const partNumber = parseInt(partIdString.replace("part-", ""));
 
@@ -47,7 +46,7 @@ export default function PartOverview({
   // }
 
   return (
-    <div className="max-w-[800px] pt-10 mx-auto flex flex-col gap-6 pb-12 font-lexend">
+    <div className="max-w-[800px] pt-12 mx-auto flex flex-col gap-6 pb-12 font-lexend">
       {/* Breadcrumbs*/}
       {/* <div className="flex items-center gap-2 text-sm font-medium capitalize">
         <Link
