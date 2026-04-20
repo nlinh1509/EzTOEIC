@@ -46,7 +46,7 @@ export default function PartOverview({
   // }
 
   return (
-    <div className="max-w-[800px] pt-12 mx-auto flex flex-col gap-6 pb-12 font-lexend">
+    <div className="w-full max-w-3xl mx-auto flex flex-col gap-6 pb-12 font-lexend">
       {/* Breadcrumbs*/}
       {/* <div className="flex items-center gap-2 text-sm font-medium capitalize">
         <Link
