@@ -3,12 +3,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useSession, signOut, signIn } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // THÊM DÒNG NÀY VÔ NÈ
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const { data: session } = useSession();
   const pathname = usePathname();
@@ -16,45 +16,37 @@ export default function Navbar() {
   return (
     <>
       <nav className="bg-white/90 backdrop-blur-xl shadow-sm border-b border-slate-200/60 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 md:px-8">
-          <div className="flex justify-between items-center h-16">
-            {/* BÊN TRÁI: Nút Mobile + Logo + Menu PC */}
-            <div className="flex gap-4 md:gap-8 ">
-              {/* hamburger */}
+        <div className="max-w-7xl mx-auto px-4 lg:px-8">
+          <div className="flex justify-between items-center h-16 lg:h-24">
+            {/* Chiều cao: 16 cho Mobile/iPad, bung ra 24 cho PC */}
+            
+            {/* ===================================================
+                BÊN TRÁI: Logo + Hamburger + Menu PC
+                =================================================== */}
+            <div className="flex items-center gap-4 lg:gap-10">
+              
+              {/* Nút Hamburger: Đã đổi thành lg:hidden (Hiện trên cả Mobile & iPad) */}
               <button
                 onClick={() => setIsOpen(true)}
-                className=" md:hidden pl-1 -ml-2 rounded-xl text-slate-500 hover:text-emerald-600 focus:outline-none transition-colors cursor-pointer"
+                className="lg:hidden pl-1 -ml-2 rounded-xl text-slate-500 hover:text-emerald-600 focus:outline-none transition-colors"
               >
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
 
-              {/* EzTOEIC logo */}
-              <Link
-                href="/"
-                className="text-2xl font-black text-emerald-600 tracking-tight"
-              >
+              {/* Logo EzTOEIC */}
+              <Link href="/" className="text-2xl lg:text-[26px] font-black text-emerald-600 tracking-tight">
                 <span className="font-extrabold text-slate-900 tracking-tight">
                   Ez<span className="text-emerald-600">TOEIC</span>
                 </span>
               </Link>
 
-              {/* laptop size */}
-              <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
+              {/* Menu Ngang: Đã đổi thành hidden lg:flex (Chỉ hiện từ PC trở lên) */}
+              <div className="hidden lg:flex items-center space-x-8 mt-1">
                 <Link
                   href="/exams/listening"
-                  className={`text-sm font-semibold transition-all duration-300 ${
+                  className={`text-base font-bold transition-all duration-300 ${
                     pathname.startsWith("/exams")
                       ? "text-emerald-600 underline decoration-2 underline-offset-[6px] hover:no-underline"
                       : "text-slate-500 hover:text-emerald-600"
@@ -65,7 +57,7 @@ export default function Navbar() {
 
                 <Link
                   href="/vocabulary"
-                  className={`text-sm font-semibold transition-all duration-300 ${
+                  className={`text-base font-bold transition-all duration-300 ${
                     pathname.startsWith("/vocabulary")
                       ? "text-emerald-600 underline decoration-2 underline-offset-[6px] hover:no-underline"
                       : "text-slate-500 hover:text-emerald-600"
@@ -76,7 +68,7 @@ export default function Navbar() {
 
                 <Link
                   href="/leaderboard"
-                  className={`text-sm font-semibold transition-all duration-300 ${
+                  className={`text-base font-bold transition-all duration-300 ${
                     pathname.startsWith("/leaderboard")
                       ? "text-emerald-600 underline decoration-2 underline-offset-[6px] hover:no-underline"
                       : "text-slate-500 hover:text-emerald-600"
@@ -87,111 +79,96 @@ export default function Navbar() {
               </div>
             </div>
 
-            {/* BÊN PHẢI: Avatar luôn hiện             */}
+            {/* ===================================================
+                BÊN PHẢI: Avatar Dropdown (Chỉ hiện từ PC trở lên)
+                =================================================== */}
+            {/* ===================================================
+                BÊN PHẢI: Avatar Dropdown / Nút Đăng nhập
+                =================================================== */}
+            {/* Đổi từ hidden lg:flex thành flex để lúc nào cũng hiện block bên phải */}
             <div className="flex items-center shrink-0">
               {session ? (
-                <div className="relative">
-                  <button
-                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    className="block focus:outline-none cursor-pointer"
+                <>
+                  {/* 📱 1. AVATAR CHO MOBILE & IPAD (< 1024px)
+                      Bấm vào là phi thẳng ra Trang cá nhân luôn */}
+                  <Link
+                    href="/profile"
+                    className="lg:hidden relative w-9 h-9 md:w-10 md:h-10 rounded-full ring-2 ring-emerald-50 hover:ring-emerald-500/40 hover:shadow-lg hover:scale-105 transition-all duration-300 overflow-hidden"
                   >
                     <Image
                       src={session.user?.image || "/logo.png"}
                       alt="Avatar"
-                      width={36}
-                      height={36}
-                      className="rounded-full ring-2 ring-transparent hover:ring-emerald-500/40 hover:shadow-lg hover:shadow-emerald-500/20 hover:scale-105 transition-all duration-300 object-cover"
+                      fill
+                      className="object-cover"
                     />
-                  </button>
+                  </Link>
 
-                  {isDropdownOpen && (
-                    <div className="hidden md:block absolute right-0 left-auto top-full mt-2 w-56 origin-top-right bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 z-50 py-2">
-                      <div className="px-4 py-3 border-b border-slate-50 mb-1">
-                        <p className="text-xs font-medium text-slate-400 truncate">
-                          Đăng nhập với tư cách
-                        </p>
-                        <p className="text-sm font-bold text-slate-700 truncate">
-                          {session.user?.email}
-                        </p>
+                  {/* 💻 2. AVATAR DROPDOWN CHO PC (>= 1024px)
+                      Bấm vào xổ menu xịn sò */}
+                  <div className="hidden lg:block relative">
+                    <button
+                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                      className="block focus:outline-none"
+                    >
+                      <div className="w-11 h-11 relative rounded-full ring-2 ring-emerald-50 hover:ring-emerald-500/40 hover:shadow-lg hover:shadow-emerald-500/20 hover:scale-105 transition-all duration-300 overflow-hidden">
+                        <Image
+                          src={session.user?.image || "/logo.png"}
+                          alt="Avatar"
+                          fill
+                          className="object-cover"
+                        />
                       </div>
+                    </button>
 
-                      <Link
-                        href="/profile"
-                        onClick={() => setIsDropdownOpen(false)}
-                        className="flex items-center px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-emerald-50 hover:text-emerald-600 transition-colors cursor-pointer"
-                      >
-                        <svg
-                          className="w-4 h-4 mr-3"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                          ></path>
-                        </svg>
-                        Trang cá nhân
-                      </Link>
+                    {/* Dropdown Menu PC */}
+                    {isDropdownOpen && (
+                      <div className="absolute right-0 top-full mt-3 w-60 origin-top-right bg-white rounded-[1.5rem] shadow-xl shadow-slate-200/50 border border-slate-100 z-50 py-2">
+                        <div className="px-5 py-3 border-b border-slate-50 mb-1 bg-slate-50/50 mx-2 rounded-xl">
+                          <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">
+                            Tài khoản của bạn
+                          </p>
+                          <p className="text-sm font-bold text-slate-800 truncate">
+                            {session.user?.email}
+                          </p>
+                        </div>
 
-                      <Link
-                        href="/settings"
-                        onClick={() => setIsDropdownOpen(false)}
-                        className="flex items-center px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-emerald-50 hover:text-emerald-600 transition-colors cursor-pointer"
-                      >
-                        <svg
-                          className="w-4 h-4 mr-3"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                          ></path>
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                          ></path>
-                        </svg>
-                        Cài đặt
-                      </Link>
+                        <div className="px-2">
+                          <Link
+                            href="/profile"
+                            onClick={() => setIsDropdownOpen(false)}
+                            className="flex items-center px-4 py-2.5 text-sm font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-600 rounded-xl transition-colors"
+                          >
+                            Trang cá nhân
+                          </Link>
 
-                      <div className="border-t border-slate-100 my-1"></div>
+                          <Link
+                            href="/settings"
+                            onClick={() => setIsDropdownOpen(false)}
+                            className="flex items-center px-4 py-2.5 text-sm font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-600 rounded-xl transition-colors"
+                          >
+                            Cài đặt
+                          </Link>
+                        </div>
 
-                      <button
-                        onClick={() => signOut()}
-                        className="w-full flex items-center px-4 py-2.5 text-sm font-semibold text-rose-500 hover:bg-rose-50 transition-colors cursor-pointer"
-                      >
-                        <svg
-                          className="w-4 h-4 mr-3"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                          ></path>
-                        </svg>
-                        Đăng xuất
-                      </button>
-                    </div>
-                  )}
-                </div>
+                        <div className="border-t border-slate-100 my-2"></div>
+
+                        <div className="px-2">
+                          <button
+                            onClick={() => signOut()}
+                            className="w-full flex items-center px-4 py-2.5 text-sm font-bold text-rose-500 hover:bg-rose-50 rounded-xl transition-colors"
+                          >
+                            Đăng xuất
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </>
               ) : (
-                // Thay vì <button onClick=...>
+                /* Nút Đăng nhập: Tui vẫn ẩn trên Mobile (lg:flex) để user dùng nút trong Hamburger cho gọn, trên PC thì hiện nút to */
                 <Link
                   href="/login"
-                  className="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold rounded-xl transition-colors shadow-sm"
+                  className="hidden lg:flex px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold rounded-xl transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
                 >
                   Đăng nhập
                 </Link>
@@ -201,20 +178,23 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* SIDEBAR MOBILE */}
+      {/* ===================================================
+          SIDEBAR DÀNH CHO MOBILE & IPAD (< 1024px)
+          =================================================== */}
+      {/* Đổi thành lg:hidden */}
       <div
-        className={`fixed inset-0 bg-slate-900/50 z-50 md:hidden transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 lg:hidden transition-opacity duration-300 ${
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={() => setIsOpen(false)}
       ></div>
 
       <div
-        className={`fixed top-0 left-0 h-full w-[280px] bg-white z-50 md:hidden flex flex-col transform transition-transform duration-300 ease-out shadow-2xl ${
+        className={`fixed top-0 left-0 h-full w-[85%] max-w-[320px] bg-white z-50 lg:hidden flex flex-col transform transition-transform duration-300 ease-out shadow-2xl ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+        <div className="p-5 border-b border-slate-100 flex items-center justify-between">
           <Link
             href="/"
             className="text-2xl font-black text-emerald-600 tracking-tight"
@@ -226,18 +206,8 @@ export default function Navbar() {
             onClick={() => setIsOpen(false)}
             className="p-2 text-slate-400 hover:text-rose-500 bg-slate-50 rounded-full transition-colors"
           >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
@@ -278,93 +248,55 @@ export default function Navbar() {
           </Link>
         </div>
 
-        <div className="p-4 border-t border-slate-100 bg-slate-50/50">
+        <div className="p-4 border-t border-slate-100 bg-slate-50/50 pb-8">
           {session ? (
             <div className="flex flex-col gap-2">
-              {" "}
-              {/* NÚT 1: HỒ SƠ (Avatar bự) */}
               <Link
                 href="/profile"
                 onClick={() => setIsOpen(false)}
                 className="flex items-center justify-between p-2 rounded-2xl hover:bg-white hover:shadow-sm transition-all border border-transparent hover:border-slate-100"
               >
                 <div className="flex items-center gap-3">
-                  <div className="relative shrink-0 w-10 h-10 rounded-full border-2 border-emerald-500 overflow-hidden bg-white">
-                    {/* <Image
+                  <div className="relative shrink-0 w-12 h-12 rounded-full border-2 border-emerald-500 overflow-hidden bg-white">
+                    <Image
                       src={session.user?.image || "/logo.png"}
                       alt="Avatar"
                       fill
                       className="object-cover"
-                    /> */}
+                    />
                   </div>
                   <div>
                     <p className="text-sm font-black text-slate-800 line-clamp-1">
                       {session.user?.name}
                     </p>
-                    <p className="text-[11px] font-medium text-slate-500">
-                      Nhấn để xem hồ sơ
+                    <p className="text-[11px] font-bold text-emerald-600 mt-0.5">
+                      Xem hồ sơ
                     </p>
                   </div>
                 </div>
-                <svg
-                  className="w-5 h-5 text-slate-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
               </Link>
-              {/* NÚT 2: CÀI ĐẶT (SẾP MỚI YÊU CẦU NÈ) */}
               <Link
                 href="/settings"
                 onClick={() => setIsOpen(false)}
-                className="flex items-center w-full py-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 hover:text-emerald-600 transition-all shadow-sm"
+                className="flex items-center justify-center w-full py-3 rounded-xl bg-white border border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 hover:text-emerald-600 transition-all shadow-sm mt-2"
               >
-                {/* icon bánh răng */}
-                {/* <svg
-                  className="w-5 h-5 text-slate-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                  ></path>
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                  ></path>
-                </svg> */}
                 Cài đặt
               </Link>
-              {/* NÚT 3: ĐĂNG XUẤT */}
               <button
                 onClick={() => {
                   signOut();
                   setIsOpen(false);
                 }}
-                className="w-full mt-1 py-2.5 bg-white border border-rose-200 text-rose-500 hover:bg-rose-50 font-bold text-sm rounded-xl transition-all shadow-sm cursor-pointer"
+                className="w-full mt-1 py-3 bg-white border border-rose-200 text-rose-500 hover:bg-rose-50 font-bold text-sm rounded-xl transition-all shadow-sm"
               >
                 Đăng xuất
               </button>
             </div>
           ) : (
-            // Thay vì <button onClick=...>
             <Link
               href="/login"
               onClick={() => setIsOpen(false)}
-              className="w-full py-3.5 bg-slate-900 text-white rounded-xl font-bold text-sm shadow-lg shadow-slate-200 hover:bg-slate-800 transition-colors text-center flex justify-center cursor-pointer"
+              className="w-full py-4 bg-slate-900 text-white rounded-xl font-bold text-[15px] shadow-lg shadow-slate-200 hover:bg-slate-800 transition-colors text-center flex justify-center"
             >
               Đăng nhập
             </Link>
