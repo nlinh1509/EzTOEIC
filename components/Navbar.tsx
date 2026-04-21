@@ -15,10 +15,8 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="bg-white/90 backdrop-blur-xl shadow-sm border-b border-slate-200/60 sticky top-0 z-40 px-0 md:px-8">
-        {" "}
-        <div className="max-w-7xl mx-auto px-4 md:px-0">
-          {" "}
+      <nav className="bg-white/90 backdrop-blur-xl shadow-sm border-b border-slate-200/60 sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="flex justify-between items-center h-16">
             {/* BÊN TRÁI: Nút Mobile + Logo + Menu PC */}
             <div className="flex gap-4 md:gap-8 ">
@@ -190,12 +188,13 @@ export default function Navbar() {
                   )}
                 </div>
               ) : (
-                <button
-                  onClick={() => signIn("google")}
+                // Thay vì <button onClick=...>
+                <Link
+                  href="/login"
                   className="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold rounded-xl transition-colors shadow-sm"
                 >
                   Đăng nhập
-                </button>
+                </Link>
               )}
             </div>
           </div>
@@ -245,7 +244,7 @@ export default function Navbar() {
 
         <div className="flex-1 overflow-y-auto p-4 space-y-2">
           <Link
-            href="/exams/listening"
+            href="/exams"
             onClick={() => setIsOpen(false)}
             className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl text-[15px] font-bold transition-all ${
               pathname.startsWith("/exams")
@@ -291,12 +290,12 @@ export default function Navbar() {
               >
                 <div className="flex items-center gap-3">
                   <div className="relative shrink-0 w-10 h-10 rounded-full border-2 border-emerald-500 overflow-hidden bg-white">
-                    <Image
+                    {/* <Image
                       src={session.user?.image || "/logo.png"}
                       alt="Avatar"
                       fill
                       className="object-cover"
-                    />
+                    /> */}
                   </div>
                   <div>
                     <p className="text-sm font-black text-slate-800 line-clamp-1">
@@ -325,7 +324,7 @@ export default function Navbar() {
               <Link
                 href="/settings"
                 onClick={() => setIsOpen(false)}
-                className="flex items-center justify-center w-full py-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 hover:text-emerald-600 transition-all shadow-sm"
+                className="flex items-center w-full py-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 hover:text-emerald-600 transition-all shadow-sm"
               >
                 {/* icon bánh răng */}
                 {/* <svg
@@ -361,12 +360,14 @@ export default function Navbar() {
               </button>
             </div>
           ) : (
-            <button
-              onClick={() => signIn("google")}
-              className="w-full py-3.5 bg-slate-900 text-white rounded-xl font-bold text-sm shadow-lg shadow-slate-200 hover:bg-slate-800 transition-colors cursor-pointer"
+            // Thay vì <button onClick=...>
+            <Link
+              href="/login"
+              onClick={() => setIsOpen(false)}
+              className="w-full py-3.5 bg-slate-900 text-white rounded-xl font-bold text-sm shadow-lg shadow-slate-200 hover:bg-slate-800 transition-colors text-center flex justify-center cursor-pointer"
             >
               Đăng nhập
-            </button>
+            </Link>
           )}
         </div>
       </div>

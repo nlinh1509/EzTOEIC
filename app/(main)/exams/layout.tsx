@@ -15,7 +15,7 @@ const sidebarMenu = [
     desc: "100 questions splitted into 3 parts",
   },
   {
-    path: "/exams",
+    path: "/exams/full-test", // <-- CHỈ CẦN SỬA CHỖ NÀY
     title: "Reading & Listening",
     desc: "200 questions splitted into 7 parts",
   },
@@ -63,10 +63,7 @@ export default function ExamsLayout({
           </h3>
           <div className="flex flex-col gap-3">
             {sidebarMenu.map((menu) => {
-              const isActive =
-                menu.path === "/exams"
-                  ? pathname === "/exams"
-                  : pathname.startsWith(menu.path);
+              const isActive = pathname.startsWith(menu.path);
               return (
                 <Link
                   key={menu.path}
