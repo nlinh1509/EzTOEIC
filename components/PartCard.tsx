@@ -18,7 +18,7 @@ export default function PartCard({
   return (
     <Link
       href={href}
-      className="group bg-white border border-slate-100 shadow-sm p-6 rounded-[2.5rem] flex flex-col md:flex-row md:items-center gap-6 md:gap-8 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 cursor-pointer"
+      className="group bg-white border border-slate-100 shadow-sm p-6 rounded-[2.5rem] flex flex-row md:flex-row md:items-center gap-6 md:gap-8 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 cursor-pointer"
     >
       <div className="w-20 h-20 rounded-3xl bg-emerald-50 flex items-center justify-center shrink-0 group-hover:bg-emerald-500 transition-colors duration-300">
         <span className="text-3xl font-black text-emerald-600 group-hover:text-white font-lexend">

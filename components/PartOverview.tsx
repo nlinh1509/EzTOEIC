@@ -104,7 +104,7 @@ export default function PartOverview({
           <Link
             key={test.id}
             href={`/exams/${category}/${partIdString}/test-${test.id}?year=${year}`}
-            className="group flex flex-col md:flex-row md:items-center gap-4 bg-white p-5 rounded-[1.5rem] border border-slate-100  hover:shadow-lg hover:-translate-y-0.5 transition-all cursor-pointer"
+            className="group flex flex-row md:flex-row md:items-center gap-4 bg-white p-5 rounded-[1.5rem] border border-slate-100  hover:shadow-lg hover:-translate-y-0.5 transition-all cursor-pointer"
           >
             <div className="flex items-center justify-center size-14 shrink-0 rounded-full bg-emerald-50 text-emerald-600 font-bold text-sm ring-4 ring-emerald-50/50 group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-300">
               0/{totalQuestions}
@@ -117,14 +117,14 @@ export default function PartOverview({
               <p className="text-sm text-slate-500 mt-0.5">{test.desc}</p>
             </div>
 
-            <div className="flex items-center gap-4">
+            {/* <div className="flex items-center gap-4">
               <span className="text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full bg-slate-100 text-slate-500 group-hover:bg-emerald-50 group-hover:text-emerald-600 transition-colors">
                 Not started
               </span>
-              {/* <span className="material-symbols-outlined text-emerald-500 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0">
+              <span className="material-symbols-outlined text-emerald-500 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0">
                 arrow_forward
-              </span> */}
-            </div>
+              </span>
+            </div> */}
           </Link>
         ))}
       </div>
