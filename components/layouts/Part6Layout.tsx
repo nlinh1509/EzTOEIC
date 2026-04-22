@@ -1,11 +1,36 @@
 "use client";
 import { useState, useEffect } from "react";
 import MultipleChoice from "@/components/MultipleChoice";
-import { QuestionGroup } from "@/data/mockData";
 
-export default function Part6Layout({ data }: { data: QuestionGroup[] }) {
+// 🔥 1. ĐÃ XÓA IMPORT MOCK DATA 
+
+// 🔥 2. TỰ ĐỊNH NGHĨA KHUÔN (TYPE) CHO DỮ LIỆU THẬT TỪ SUPABASE
+export interface RealOption {
+  label: string;
+  text: string;
+}
+
+export interface RealQuestion {
+  id: number;
+  questionNumber: number;
+  options: RealOption[];
+  correctAnswer: string;
+  explanation: string;
+}
+
+export interface RealPart6Group {
+  id: number;
+  passageText: string;
+  questions: RealQuestion[];
+}
+
+// 🔥 3. TRUYỀN TYPE MỚI VÀO COMPONENT
+export default function Part6Layout({ data }: { data: RealPart6Group[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
+  
+  // 🔥 FIX 4: Đổi Record<string, string> thành Record<number, string> vì id của Supabase là số
+  const [answers, setAnswers] = useState<Record<number, string>>({});
+  
   const [isChecked, setIsChecked] = useState(false);
   const [score, setScore] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
@@ -13,7 +38,7 @@ export default function Part6Layout({ data }: { data: QuestionGroup[] }) {
   const currentGroup = data[currentIndex];
   const totalGroups = data.length;
 
-  const handleSelect = (questionId: string, label: string) => {
+  const handleSelect = (questionId: number, label: string) => {
     if (!isChecked) {
       setAnswers((prev) => ({ ...prev, [questionId]: label }));
     }
@@ -63,6 +88,12 @@ export default function Part6Layout({ data }: { data: QuestionGroup[] }) {
           {score}{" "}
           <span className="text-2xl text-slate-300">/ {totalQuestions}</span>
         </p>
+        <button
+          onClick={() => window.location.reload()}
+          className="w-full mt-8 py-4 rounded-2xl cursor-pointer bg-slate-900 text-white font-bold hover:bg-slate-800 transition-colors"
+        >
+          Làm Lại Từ Đầu
+        </button>
       </div>
     );
   }
@@ -71,7 +102,6 @@ export default function Part6Layout({ data }: { data: QuestionGroup[] }) {
 
   return (
     <div className="max-w-[1200px] mx-auto w-full flex flex-col gap-6 pb-12 mt-6 pt-8">
-      {/* pb-12 */}
       {/* Header */}
       <div className="mb-4">
         <div className="flex justify-between items-end mb-3 px-2">
@@ -130,7 +160,7 @@ export default function Part6Layout({ data }: { data: QuestionGroup[] }) {
                 <span className="text-emerald-600 font-bold mr-1">
                   Question {q.questionNumber}.
                 </span>
-                Choose the best word or phrase for blank
+                Choose the best word or phrase for the blank.
               </p>
 
               <div className="w-full">

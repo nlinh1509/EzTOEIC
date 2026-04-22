@@ -1,10 +1,32 @@
 "use client";
 import { useState, useEffect } from "react";
 import MultipleChoice from "@/components/MultipleChoice";
-import { QuestionGroup } from "@/data/mockData";
 
-// Nhận Data từ Tầng 3 (Page) truyền xuống
-export default function Part5Layout({ data }: { data: QuestionGroup }) {
+// 🔥 1. ĐÃ XÓA DÒNG IMPORT MOCK DATA 
+// import { QuestionGroup } from "@/data/mockData";
+
+// 🔥 2. TỰ ĐỊNH NGHĨA KHUÔN (TYPE) MỚI CHO DỮ LIỆU THẬT
+export type RealOption = {
+  label: string;
+  text: string;
+};
+
+export type RealQuestion = {
+  id: number;
+  questionNumber: number;
+  questionText: string;
+  options: RealOption[];
+  correctAnswer: string;
+  explanation: string;
+};
+
+export type RealQuestionGroup = {
+  id: number;
+  questions: RealQuestion[];
+};
+
+// 🔥 3. THAY TYPE MỚI VÀO COMPONENT
+export default function Part5Layout({ data }: { data: RealQuestionGroup }) {
   const questions = data.questions;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);

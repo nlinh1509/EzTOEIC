@@ -19,24 +19,36 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-4 lg:px-8">
           <div className="flex justify-between items-center h-16 lg:h-24">
             {/* Chiều cao: 16 cho Mobile/iPad, bung ra 24 cho PC */}
-            
+
             {/* ===================================================
                 BÊN TRÁI: Logo + Hamburger + Menu PC
                 =================================================== */}
             <div className="flex items-center gap-4 lg:gap-10">
-              
               {/* Nút Hamburger: Đã đổi thành lg:hidden (Hiện trên cả Mobile & iPad) */}
               <button
                 onClick={() => setIsOpen(true)}
                 className="lg:hidden pl-1 -ml-2 rounded-xl text-slate-500 hover:text-emerald-600 focus:outline-none transition-colors"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 6h16M4 12h16M4 18h16" />
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2.5"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
                 </svg>
               </button>
 
               {/* Logo EzTOEIC */}
-              <Link href="/" className="text-2xl lg:text-[26px] font-black text-emerald-600 tracking-tight">
+              <Link
+                href="/"
+                className="text-2xl lg:text-[26px] font-black text-emerald-600 tracking-tight"
+              >
                 <span className="font-extrabold text-slate-900 tracking-tight">
                   Ez<span className="text-emerald-600">TOEIC</span>
                 </span>
@@ -110,7 +122,7 @@ export default function Navbar() {
                       onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                       className="block focus:outline-none"
                     >
-                      <div className="w-11 h-11 relative rounded-full ring-2 ring-emerald-50 hover:ring-emerald-500/40 hover:shadow-lg hover:shadow-emerald-500/20 hover:scale-105 transition-all duration-300 overflow-hidden">
+                      <div className="w-11 h-11 relative rounded-full ring-2 ring-emerald-50 hover:ring-emerald-500/40 hover:shadow-lg hover:shadow-emerald-500/20 hover:scale-105 transition-all duration-300 overflow-hidden cursor-pointer">
                         <Image
                           src={session.user?.image || "/logo.png"}
                           alt="Avatar"
@@ -155,7 +167,7 @@ export default function Navbar() {
                         <div className="px-2">
                           <button
                             onClick={() => signOut()}
-                            className="w-full flex items-center px-4 py-2.5 text-sm font-bold text-rose-500 hover:bg-rose-50 rounded-xl transition-colors"
+                            className="w-full flex items-center px-4 py-2.5 text-sm font-bold text-rose-500 hover:bg-rose-50 rounded-xl transition-colors cursor-pointer"
                           >
                             Đăng xuất
                           </button>
@@ -206,8 +218,18 @@ export default function Navbar() {
             onClick={() => setIsOpen(false)}
             className="p-2 text-slate-400 hover:text-rose-500 bg-slate-50 rounded-full transition-colors"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2.5"
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
