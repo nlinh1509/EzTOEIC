@@ -17,7 +17,7 @@ export default function Navbar() {
     <>
       <nav className="bg-white/90 backdrop-blur-xl shadow-sm border-b border-slate-200/60 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 lg:px-8">
-          <div className="flex justify-between items-center h-16 lg:h-24">
+          <div className="flex justify-between items-center h-16 lg:h-">
             {/* Chiều cao: 16 cho Mobile/iPad, bung ra 24 cho PC */}
 
             {/* ===================================================
@@ -58,7 +58,7 @@ export default function Navbar() {
               <div className="hidden lg:flex items-center space-x-8 mt-1">
                 <Link
                   href="/exams/listening"
-                  className={`text-base font-bold transition-all duration-300 ${
+                  className={` font-bold text-sm transition-all duration-300 ${
                     pathname.startsWith("/exams")
                       ? "text-emerald-600 underline decoration-2 underline-offset-[6px] hover:no-underline"
                       : "text-slate-500 hover:text-emerald-600"
@@ -69,7 +69,7 @@ export default function Navbar() {
 
                 <Link
                   href="/vocabulary"
-                  className={`text-base font-bold transition-all duration-300 ${
+                  className={`text-sm font-bold transition-all duration-300 ${
                     pathname.startsWith("/vocabulary")
                       ? "text-emerald-600 underline decoration-2 underline-offset-[6px] hover:no-underline"
                       : "text-slate-500 hover:text-emerald-600"
@@ -80,7 +80,7 @@ export default function Navbar() {
 
                 <Link
                   href="/leaderboard"
-                  className={`text-base font-bold transition-all duration-300 ${
+                  className={`text-sm font-bold transition-all duration-300 ${
                     pathname.startsWith("/leaderboard")
                       ? "text-emerald-600 underline decoration-2 underline-offset-[6px] hover:no-underline"
                       : "text-slate-500 hover:text-emerald-600"

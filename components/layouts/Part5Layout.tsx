@@ -103,7 +103,8 @@ export default function Part5Layout({ data }: { data: RealQuestionGroup }) {
 
   // --- GIAO DIỆN LÀM BÀI ---
   return (
-    <div className="max-w-[1000px] mx-auto w-full flex flex-col gap-6 pb-12 mt-6 pt-8">
+    // mt-6 pt-8
+    <div className="max-w-[1000px] mx-auto w-full flex flex-col gap-6 pb-12 ">
       {/* Thanh tiến độ */}
       <div className="mb-2">
         <div className="flex justify-between items-end mb-3 px-2">

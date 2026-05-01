@@ -1,31 +1,41 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import MultipleChoice from "@/components/MultipleChoice";
 import AudioPlayer from "@/components/AudioPlayer";
-import { QuestionGroup } from "@/data/mockData";
 
-export default function Part1Layout({ data }: { data: QuestionGroup[] }) {
+// 1. CẬP NHẬT INTERFACE CHO KHỚP VỚI SUPABASE DATA
+interface Question {
+  id: number;
+  question_number: number;
+  content: string;
+  image_url: string;
+  option_a: string;
+  option_b: string;
+  option_c: string;
+  option_d: string;
+  correct_answer: string;
+  explanation: string;
+}
+
+interface RealPart1Group {
+  id: number;
+  passage_text: string;
+  audio_url: string;
+  questions: Question[];
+}
+
+export default function Part1Layout({ data }: { data: RealPart1Group[] }) {
+  // 1. TOÀN BỘ HOOKS PHẢI NẰM Ở TRÊN CÙNG
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isChecked, setIsChecked] = useState(false);
   const [score, setScore] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
 
-  const currentGroup = data[currentIndex];
-  const currentQ = currentGroup.questions[0]; // Rút câu hỏi đầu tiên của group
-  const totalQuestions = data.length; // Tổng số câu = Tổng số group
+  // Khai báo biến an toàn để xài trong Hook
+  const totalQuestions = data?.length || 0;
 
-  const handleSelect = (label: string) => {
-    if (!isChecked) {
-      setSelectedOption(label);
-      setIsChecked(true);
-      if (label === currentQ.correctAnswer) {
-        setScore((prev) => prev + 1);
-      }
-    }
-  };
-
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (currentIndex < totalQuestions - 1) {
       setCurrentIndex((prev) => prev + 1);
       setSelectedOption(null);
@@ -33,19 +43,47 @@ export default function Part1Layout({ data }: { data: QuestionGroup[] }) {
     } else {
       setIsFinished(true);
     }
-  };
+  }, [currentIndex, totalQuestions]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Enter") {
+      if (e.key === "Enter" && isChecked) {
         e.preventDefault();
         handleNext();
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isChecked, currentIndex, totalQuestions]);
+  }, [isChecked, handleNext]);
 
+  // =========================================================
+  // 2. TỪ ĐÂY TRỞ XUỐNG MỚI ĐƯỢC XÀI "IF ... RETURN"
+  // =========================================================
+
+  // Check an toàn nếu data rỗng
+  if (!data || data.length === 0) {
+    return (
+      <div className="flex justify-center items-center h-40 text-slate-500 font-medium">
+        Đang tải dữ liệu...
+      </div>
+    );
+  }
+
+  const currentGroup = data[currentIndex];
+  const currentQ = currentGroup?.questions?.[0];
+
+  if (!currentQ) {
+    return (
+      <div className="p-10 text-center mt-10 max-w-md mx-auto bg-rose-50 border border-rose-200 rounded-2xl">
+        <h3 className="text-rose-600 font-bold mb-2">Lỗi Dữ Liệu!</h3>
+        <p className="text-rose-500 text-sm">
+          Không tìm thấy câu hỏi cho đoạn audio này.
+        </p>
+      </div>
+    );
+  }
+
+  // Nếu màn hình hiển thị Result Card
   if (isFinished) {
     return (
       <div className="bg-white p-10 rounded-[2.5rem] shadow-sm border border-slate-100 text-center max-w-md mx-auto mt-10">
@@ -60,37 +98,69 @@ export default function Part1Layout({ data }: { data: QuestionGroup[] }) {
     );
   }
 
+  // =========================================================
+  // 3. LOGIC XỬ LÝ GIAO DIỆN CHÍNH
+  // =========================================================
+
+  const handleSelect = (label: string) => {
+    if (!isChecked) {
+      setSelectedOption(label);
+      setIsChecked(true);
+      if (label === currentQ.correct_answer) {
+        setScore((prev) => prev + 1);
+      }
+    }
+  };
+
   const progressPercent = ((currentIndex + 1) / totalQuestions) * 100;
 
-  // Xóa chữ "Option A, B..."
-  const noTextOptions = currentQ.options.map((opt) => ({
-    label: opt.label,
-    text: "",
-  }));
+  const noTextOptions = [
+    { label: "A", text: "" },
+    { label: "B", text: "" },
+    { label: "C", text: "" },
+    { label: "D", text: "" },
+  ];
+
+  const explanationText = currentQ.explanation || "";
+  const transcriptPart = explanationText
+    .split("=>")[0]
+    ?.replace("Transcript:", "")
+    .trim();
+  const reasoningPart = explanationText.split("=>")[1]?.trim();
 
   return (
     <div className="max-w-[1000px] mx-auto w-full flex flex-col gap-6 pb-12 mt-6 pt-8">
       {/* Header */}
       <div className="mb-4">
-        <div className="flex justify-between items-end mb-3 px-2">
-          <div>
-            <h2 className="text-xl font-black text-slate-800 uppercase tracking-tight">
+        {/* 
+      - flex-col: Xếp chồng lên nhau khi ở màn hình nhỏ
+      - sm:flex-row: Tự động dàn hàng ngang khi màn hình từ 640px trở lên
+      - items-start sm:items-end: Căn lề trái trên mobile, căn lề dưới trên desktop
+  */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3 mb-3 px-2">
+          <div className="max-w-2xl">
+            <h2 className="text-lg sm:text-xl font-black text-slate-800 uppercase tracking-tight">
               PART 1 - TEST 1
             </h2>
-            <p className="text-sm text-slate-500 mt-1 font-medium">
+            <p className="text-xs sm:text-sm text-slate-500 mt-1 font-medium leading-tight">
               Listen to the audio and choose the statement that best describes
               the picture.
             </p>
           </div>
-          <span className="text-emerald-600 font-bold bg-emerald-100 px-3 py-1 rounded-lg text-sm">
+
+          {/* 
+        - whitespace-nowrap: Không cho phép cái Badge này bị xuống dòng giữa chữ Question và số
+        - self-start sm:self-auto: Giúp Badge không bị kéo dài hết chiều rộng trên mobile
+    */}
+          <span className="whitespace-nowrap text-emerald-600 font-bold bg-emerald-100 px-3 py-1 rounded-lg text-xs sm:text-sm self-start sm:self-auto shadow-sm">
             Question {currentIndex + 1} / {totalQuestions}
           </span>
         </div>
 
-        {/* process */}
-        <div className="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
+        {/* Progress Bar giữ nguyên hoặc sếp có thể bóp nhẹ margin */}
+        <div className="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden shadow-inner">
           <div
-            className="bg-emerald-500 h-full rounded-full transition-all duration-500"
+            className="bg-emerald-500 h-full rounded-full transition-all duration-500 ease-out"
             style={{ width: `${progressPercent}%` }}
           ></div>
         </div>
@@ -100,40 +170,35 @@ export default function Part1Layout({ data }: { data: QuestionGroup[] }) {
       <div className="flex flex-col md:flex-row gap-8 items-stretch">
         {/* CỘT TRÁI: HÌNH ẢNH TO ĐÙNG */}
         <div className="w-full md:w-1/2 flex flex-col">
-          <div className="w-full flex-1 min-h-[300px] bg-slate-200 rounded-2xl overflow-hidden relative shadow-sm border border-slate-200 group">
+          <div className="w-full bg-slate-50 rounded-xl overflow-hidden shadow-sm border border-slate-200 group relative">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={
-                currentGroup.imageUrl || // LẤY ẢNH TỪ currentGroup NÈ
-                "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=800&auto=format&fit=crop"
-              }
-              alt={`Part 1 Question ${currentQ.questionNumber}`}
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700"
+              src={currentQ.image_url}
+              alt={`Part 1 Question ${currentQ.question_number}`}
+              className="w-full h-auto block transition-transform duration-700"
             />
           </div>
         </div>
 
         {/* CỘT PHẢI: AUDIO & ĐÁP ÁN */}
-        <div className="w-full md:w-1/2 flex flex-col gap-6">
+        <div className="w-full md:w-1/2 flex flex-col  gap-6">
           <AudioPlayer
-            key={currentGroup.audioUrl} // QUAN TRỌNG: Thêm key để React reset audio
-            src={
-              currentGroup.audioUrl || // LẤY NHẠC TỪ currentGroup NÈ
-              "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
-            }
+            key={currentGroup.audio_url}
+            src={currentGroup.audio_url}
           />
-          <div className="bg-white shadow-sm border border-slate-100 p-6 md:p-8 rounded-[1.5rem] flex-1 flex flex-col">
+          <div className="bg-white shadow-sm border border-slate-100 p-6 md:p-8 rounded-[1.5rem]  flex flex-col  ">
             <p className="mb-6 p-4 bg-slate-50 border border-slate-100 rounded-xl text-sm md:text-base font-semibold leading-relaxed text-slate-600">
               <span className="text-emerald-600 font-bold mr-1">
-                Question {currentQ.questionNumber}.
+                Question {currentQ.question_number}.
               </span>
-              Look at the picture marked number one in your test book.
+              Look at the picture marked number {currentQ.question_number} in
+              your test book.
             </p>
 
             <MultipleChoice
               options={noTextOptions}
               selectedOption={selectedOption}
-              correctAnswer={currentQ.correctAnswer}
+              correctAnswer={currentQ.correct_answer}
               isChecked={isChecked}
               onSelect={handleSelect}
             />
@@ -159,8 +224,10 @@ export default function Part1Layout({ data }: { data: QuestionGroup[] }) {
           </div>
         </div>
       </div>
+
+      {/* explan box */}
       {isChecked && (
-        <div className="bg-emerald-50 border border-emerald-100 p-6 rounded-[1.5rem] animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="mt-6 bg-emerald-50 border border-emerald-100 p-6 rounded-[1.5rem] animate-in fade-in duration-500">
           <div className="flex items-start gap-4">
             <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center shrink-0 shadow-sm shadow-emerald-200">
               <span
@@ -178,7 +245,7 @@ export default function Part1Layout({ data }: { data: QuestionGroup[] }) {
                 <p>
                   Đáp án chính xác là:{" "}
                   <strong className="text-emerald-600 font-black text-xl ml-1">
-                    {currentQ.correctAnswer}
+                    {currentQ.correct_answer}
                   </strong>
                 </p>
                 <div className="bg-white/80 p-4 rounded-2xl border border-emerald-100/50">

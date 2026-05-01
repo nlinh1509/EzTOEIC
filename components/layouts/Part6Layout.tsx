@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import MultipleChoice from "@/components/MultipleChoice";
 
-// 🔥 1. ĐÃ XÓA IMPORT MOCK DATA 
+// 🔥 1. ĐÃ XÓA IMPORT MOCK DATA
 
 // 🔥 2. TỰ ĐỊNH NGHĨA KHUÔN (TYPE) CHO DỮ LIỆU THẬT TỪ SUPABASE
 export interface RealOption {
@@ -18,6 +18,7 @@ export interface RealQuestion {
   explanation: string;
 }
 
+
 export interface RealPart6Group {
   id: number;
   passageText: string;
@@ -27,10 +28,10 @@ export interface RealPart6Group {
 // 🔥 3. TRUYỀN TYPE MỚI VÀO COMPONENT
 export default function Part6Layout({ data }: { data: RealPart6Group[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  
+
   // 🔥 FIX 4: Đổi Record<string, string> thành Record<number, string> vì id của Supabase là số
   const [answers, setAnswers] = useState<Record<number, string>>({});
-  
+
   const [isChecked, setIsChecked] = useState(false);
   const [score, setScore] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
@@ -101,7 +102,7 @@ export default function Part6Layout({ data }: { data: RealPart6Group[] }) {
   const progressPercent = ((currentIndex + 1) / totalGroups) * 100;
 
   return (
-    <div className="max-w-[1200px] mx-auto w-full flex flex-col gap-6 pb-12 mt-6 pt-8">
+    <div className="max-w-[1200px] mx-auto w-full flex flex-col gap-6 pb-12 pt-">
       {/* Header */}
       <div className="mb-4">
         <div className="flex justify-between items-end mb-3 px-2">

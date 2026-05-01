@@ -2,29 +2,141 @@ import Part1Layout from "@/components/layouts/Part1Layout";
 import Part2Layout from "@/components/layouts/Part2Layout";
 import Part3Layout from "@/components/layouts/Part3Layout";
 import Part4Layout from "@/components/layouts/Part4Layout";
+import { supabase } from "@/lib/supabase";
 
-import { mockPart1, mockPart2, mockPart3 } from "@/data/mockData";
+import { mockPart2, mockPart3 } from "@/data/mockData";
+
+// --- ĐỊNH NGHĨA KIỂU DỮ LIỆU TỪ SUPABASE CHO LISTENING ---
+// (Lưu ý: Giữ nguyên như cũ, vì từ DB có thể ra null)
+interface DBQuestion {
+  id: number;
+  question_number: number;
+  content: string;
+  image_url: string | null; 
+  option_a: string;
+  option_b: string;
+  option_c: string;
+  option_d: string;
+  correct_answer: string;
+  explanation: string | null; 
+}
+
+interface DBQuestionGroup {
+  id: number;
+  passage_text: string;
+  audio_url: string | null; 
+  questions: DBQuestion[];
+}
 
 export default async function ListeningTestPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ partId: string; testId: string }>;
+  searchParams: Promise<{ year?: string }>;
 }) {
   const resolvedParams = await params;
-  const partId = resolvedParams.partId; // Lấy chữ "part-1" từ thanh URL
+  const resolvedSearchParams = await searchParams;
 
-  // Bắt đường dẫn Part 1
-  if (partId === "part-1") {
-    // Truyền tạm data giả vào để render giao diện
-    return <Part1Layout data={mockPart1} />;
+  const partId = resolvedParams.partId;
+  const testIdRaw = resolvedParams.testId;
+
+  // Lấy ra số 1, 2, 3 từ chữ "test-1"
+  const testNum = parseInt(testIdRaw.replace(/\D/g, ""), 10);
+  const examYear = parseInt(resolvedSearchParams.year || "2026", 10);
+
+  // TÌM ID THẬT CỦA ĐỀ THI
+  const { data: currentExam, error: examError } = await supabase
+    .from("exams")
+    .select("id")
+    .eq("exam_year", examYear)
+    .ilike("title", `%Test ${testNum}%`)
+    .single();
+
+  if (examError || !currentExam) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh]">
+        <span className="material-symbols-outlined text-6xl text-slate-300 mb-4">
+          search_off
+        </span>
+        <h2 className="text-2xl font-bold text-slate-700">
+          Không tìm thấy đề thi!
+        </h2>
+      </div>
+    );
   }
 
+  const realExamId = currentExam.id;
+
+  // ====================================================================
+  // XỬ LÝ PART 1
+  // ====================================================================
+  if (partId === "part-1") {
+    const { data: groups, error } = await supabase
+      .from("question_groups")
+      .select(
+        `
+        id,
+        passage_text,
+        audio_url,
+        questions (
+          id, question_number, content, image_url, option_a, option_b, option_c, option_d, correct_answer, explanation
+        )
+      `,
+      )
+      .eq("exam_id", realExamId)
+      .eq("part", 1)
+      .order("id", { ascending: true });
+
+    if (error || !groups || groups.length === 0) {
+      return (
+        <div className="flex flex-col items-center justify-center min-h-[60vh]">
+          <span className="material-symbols-outlined text-6xl text-slate-300 mb-4">
+            headset_off
+          </span>
+          <h2 className="text-2xl font-bold text-slate-700">
+            Chưa có dữ liệu Part 1
+          </h2>
+
+        </div>
+      );
+    }
+
+    const typedGroups = groups as unknown as DBQuestionGroup[];
+
+    // 🔥 ĐOẠN NÀY QUAN TRỌNG: LÀM SẠCH VÀ CHUẨN HÓA DATA TRƯỚC KHI ĐƯA VÀO LAYOUT
+    const cleanPart1Data = typedGroups.map((group) => ({
+      id: group.id,
+      passage_text: group.passage_text || "",
+      audio_url: group.audio_url || "", // Đảm bảo luôn là chuỗi, không bao giờ null
+      questions: group.questions
+        .sort((a, b) => a.question_number - b.question_number)
+        .map((q) => ({
+          id: q.id,
+          question_number: q.question_number,
+          content: q.content || "",
+          image_url: q.image_url || "", // Rút kinh nghiệm, ép nó thành chuỗi rỗng nếu DB trả null
+          option_a: q.option_a || "",
+          option_b: q.option_b || "",
+          option_c: q.option_c || "",
+          option_d: q.option_d || "",
+          correct_answer: q.correct_answer || "",
+          explanation: q.explanation || "Chưa có giải thích.",
+        })),
+    }));
+
+    // Truyền DATA ĐÃ LÀM SẠCH vào Layout
+    return <Part1Layout data={cleanPart1Data} />;
+  }
+
+  // ====================================================================
+  // XỬ LÝ PART 2, 3, 4 (Tạm thời giữ placeholder)
+  // ====================================================================
   if (partId === "part-2") {
     // Truyền tạm data giả vào để render giao diện
     return <Part2Layout data={mockPart2} />;
   }
 
-  // Nhớ import Part3Layout và mockPart3 ở trên cùng nha
   if (partId === "part-3") {
     return <Part3Layout data={mockPart3} />;
   }
@@ -32,17 +144,13 @@ export default async function ListeningTestPage({
   if (partId === "part-4") {
     return <Part4Layout data={mockPart3} />;
   }
-
-  // Nếu lỡ bấm qua part 2, part 3, part 4 thì báo lỗi nhẹ
+  
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] font-sans">
       <span className="material-symbols-outlined text-6xl text-slate-300 mb-4">
         headphones
       </span>
       <h2 className="text-2xl font-bold text-slate-700">Đang xây dựng...</h2>
-      <p className="text-slate-500 mt-2">
-        Giao diện của {partId.replace("-", " ")} sắp ra mắt nha!
-      </p>
     </div>
   );
 }

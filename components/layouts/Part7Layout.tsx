@@ -1,11 +1,33 @@
 "use client";
 import { useState, useEffect } from "react";
 import MultipleChoice from "@/components/MultipleChoice";
-import { QuestionGroup } from "@/data/mockData";
 
-export default function Part7Layout({ data }: { data: QuestionGroup[] }) {
+export interface RealOption {
+  label: string;
+  text: string;
+}
+
+export interface RealQuestion {
+  id: number;
+  questionNumber: number;
+  questionText: string; // 🔥 FIX 1: Khai báo thêm questionText cho Part 7
+  options: RealOption[];
+  correctAnswer: string;
+  explanation: string;
+}
+
+export interface RealPart7Group {
+  id: number;
+  passageText: string;
+  questions: RealQuestion[];
+}
+
+export default function Part7Layout({ data }: { data: RealPart7Group[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
+  
+  // 🔥 FIX 2: Đổi Record<string, string> thành Record<number, string>
+  const [answers, setAnswers] = useState<Record<number, string>>({});
+  
   const [isChecked, setIsChecked] = useState(false);
   const [score, setScore] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
@@ -13,7 +35,8 @@ export default function Part7Layout({ data }: { data: QuestionGroup[] }) {
   const currentGroup = data[currentIndex];
   const totalGroups = data.length;
 
-  const handleSelect = (questionId: string, label: string) => {
+  // 🔥 FIX 3: Đổi questionId từ string sang number
+  const handleSelect = (questionId: number, label: string) => {
     if (!isChecked) {
       setAnswers((prev) => ({ ...prev, [questionId]: label }));
     }
@@ -63,6 +86,12 @@ export default function Part7Layout({ data }: { data: QuestionGroup[] }) {
           {score}{" "}
           <span className="text-2xl text-slate-300">/ {totalQuestions}</span>
         </p>
+        <button
+          onClick={() => window.location.reload()}
+          className="w-full mt-8 py-4 rounded-2xl cursor-pointer bg-slate-900 text-white font-bold hover:bg-slate-800 transition-colors"
+        >
+          Làm Lại Từ Đầu
+        </button>
       </div>
     );
   }
@@ -70,7 +99,7 @@ export default function Part7Layout({ data }: { data: QuestionGroup[] }) {
   const progressPercent = ((currentIndex + 1) / totalGroups) * 100;
 
   return (
-    <div className="max-w-[1200px] mx-auto w-full flex flex-col gap-6 pb-12 mt-6 pt-8">
+    <div className="max-w-[1200px] mx-auto w-full flex flex-col gap-6 pb-12 ">
       {/* Header */}
       <div className="mb-4 ">
         <div className="flex justify-between items-end mb-3 px-2">
@@ -96,8 +125,8 @@ export default function Part7Layout({ data }: { data: QuestionGroup[] }) {
 
       {/* GIAO DIỆN CHIA 2 CỘT (SPLIT SCREEN) */}
       <div className="flex flex-col lg:flex-row gap-8 items-start">
-        {/* CỘT TRÁI: ĐOẠN VĂN (Đã fix lỗi bị cắt chữ bằng max-h và cuộn độc lập) */}
-        <div className="w-full lg:w-1/2 lg:sticky lg:top-24 overflow-y-auto pr-2 custom-scrollbar">
+        {/* CỘT TRÁI: ĐOẠN VĂN */}
+        <div className="w-full lg:w-[56%] lg:sticky lg:top-24 overflow-y-auto pr-2 custom-scrollbar">
           <div className="bg-white shadow-sm border border-slate-100 p-6 md:p-8 rounded-[1.5rem]">
             <div className="flex items-center gap-2 mb-6 pb-4 border-b border-slate-100">
               <span
@@ -108,7 +137,6 @@ export default function Part7Layout({ data }: { data: QuestionGroup[] }) {
               </span>
               <h3 className="font-bold text-slate-700">Reading Passage</h3>
             </div>
-            {/* Render HTML đoạn văn từ Data */}
             <div
               className="prose prose-slate max-w-none text-[15px] md:text-[16px]"
               dangerouslySetInnerHTML={{
@@ -119,7 +147,7 @@ export default function Part7Layout({ data }: { data: QuestionGroup[] }) {
         </div>
 
         {/* CỘT PHẢI: DANH SÁCH CÂU HỎI */}
-        <div className="w-full lg:w-1/2 flex flex-col gap-6">
+        <div className="w-full lg:w-[44%] flex flex-col gap-6">
           {currentGroup.questions.map((q) => (
             <div
               key={q.id}
@@ -129,8 +157,7 @@ export default function Part7Layout({ data }: { data: QuestionGroup[] }) {
                 <span className="text-emerald-600 font-bold mr-1">
                   Question {q.questionNumber}.
                 </span>
-                {q.questionText}{" "} 
-                {/* <-- Tui đã trả lại nội dung đề bài chuẩn cho câu hỏi ở đây nha */}
+                {q.questionText}
               </p>
 
               <div className="w-full">

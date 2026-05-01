@@ -28,7 +28,7 @@ export default function MultipleChoice({
     <div
       className={`grid gap-4 ${
         hasText
-          ? "grid-cols-1 md:grid-cols-2" // Nếu có chữ thì chia 2 cột
+          ? "grid-cols-1 md:grid-cols-1" // Nếu có chữ thì chia 2 cột
           : options.length === 3
             ? "grid-cols-3" // Nếu Part 2 (3 đáp án) thì chia 3 cột
             : "grid-cols-2 md:grid-cols-4" // Nếu Part 1 (4 đáp án) thì chia 4 cột
@@ -40,14 +40,14 @@ export default function MultipleChoice({
           "border-slate-200 bg-white hover:border-emerald-700/50 hover:bg-emerald-50/50 cursor-pointer active:scale-[0.98]";
         let letterStyle =
           "bg-slate-100 text-slate-500 group-hover:bg-emerald-500 group-hover:text-white";
-        let textStyle = "text-slate-600";
+        let textStyle = "text-slate-600 font-semibold";
 
         // 2. Style khi user click chọn (nhưng chưa nộp bài)
         if (!isChecked && selectedOption === opt.label) {
           btnStyle =
             "border-emerald-500 bg-emerald-50 shadow-md ring-1 ring-emerald-500/20";
           letterStyle = "bg-emerald-500 text-white";
-          textStyle = "text-slate-900 font-bold";
+          textStyle = "text-slate-600 font-semibold ";
         }
 
         // 3. Style sau khi bấm "Nộp bài / Chấm điểm" (isChecked = true)
@@ -56,12 +56,12 @@ export default function MultipleChoice({
             // user chọn đúng -> XANH LÁ
             btnStyle = "border-emerald-600/80 bg-emerald-50 cursor-default";
             letterStyle = "bg-emerald-600 text-white";
-            textStyle = "text-slate-900 font-bold";
+            textStyle = "text-slate-600 font-semibold";
           } else if (opt.label === selectedOption) {
             // user chọn sai -> ĐỎ
             btnStyle = "border-rose-500 bg-rose-50 cursor-default";
             letterStyle = "bg-rose-500 text-white";
-            textStyle = "text-rose-900 font-bold";
+            textStyle = "text-rose-600 font-semibold";
           } else {
             // còn lại -> MỜ ĐI
             btnStyle = "border-slate-100 bg-white opacity-40 cursor-default";
@@ -75,11 +75,11 @@ export default function MultipleChoice({
             key={opt.label}
             disabled={isChecked}
             onClick={() => onSelect(opt.label)}
-            className={`flex items-center p-4 border-2 rounded-2xl transition-all duration-200 text-left group ${btnStyle} ${!hasText && "justify-center"}`}
+            className={`flex items-center px-4 py-3 border-2 rounded-2xl transition-all duration-200 text-left group ${btnStyle} ${!hasText && "justify-center"}`}
           >
             {/* Chữ cái A, B, C, D */}
             <span
-              className={`w-8 h-10 shrink-0 flex items-center justify-center rounded-xl font-bold text-lg transition-colors tracking-wider ${textStyle} ${hasText ? "mr-0" : ""}`}
+              className={`w-8 h-10 shrink-0 flex items-center justify-center rounded-xl font-bold text-base transition-colors tracking-wider ${textStyle} ${hasText ? "mr-0" : ""}`}
             >
               {opt.label}
               {hasText ? "." : ""}
@@ -88,7 +88,7 @@ export default function MultipleChoice({
             {/* answer*/}
             {hasText && opt.text !== "" && (
               <span
-                className={`text-base font-semibold transition-colors ${textStyle} font-sans`}
+                className={`text-[15px] transition-colors ${textStyle} font-sans`}
               >
                 {opt.text}
               </span>
